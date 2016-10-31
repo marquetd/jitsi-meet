@@ -152,6 +152,7 @@ a.button>#avatar {
 
 #feedbackButton {
     margin-top: auto;
+    display:none;
 }
 
 /**
@@ -188,21 +189,21 @@ a.button>#avatar {
  * START of slide in animation for extended toolbar.
  */
 @include keyframes(slideInX) {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(0%); }
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(0%); }
 }
 
 .slideInX {
-  @include animation('slideInX .5s forwards');
+    @include animation('slideInX .5s forwards');
 }
 
 @include keyframes(slideOutX) {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-100%); }
+    0% { transform: translateX(0%); }
+    100% { transform: translateX(-100%); }
 }
 
 .slideOutX {
-  @include animation('slideOutX .5s forwards');
+    @include animation('slideOutX .5s forwards');
 }
 
 @include keyframes(slideInExtX) {
@@ -211,7 +212,7 @@ a.button>#avatar {
 }
 
 .slideInExtX {
-  @include animation('slideInExtX .5s forwards');
+    @include animation('slideInExtX .5s forwards');
 }
 
 @include keyframes(slideOutExtX) {
@@ -220,7 +221,7 @@ a.button>#avatar {
 }
 
 .slideOutExtX {
-  @include animation('slideOutExtX .5s forwards');
+    @include animation('slideOutExtX .5s forwards');
 }
 
 /**
@@ -235,7 +236,7 @@ a.button>#avatar {
 }
 
 .slideInY {
-  @include animation('slideInY .5s forwards');
+    @include animation('slideInY .5s forwards');
 }
 
 @include keyframes(slideOutY) {
@@ -263,12 +264,12 @@ a.button>#avatar {
 }
 
 @include keyframes(slideOutExt) {
-  from { width: 200px; } // TO FIX: Make this value a percentage.
-  to   { width: 0px; }
+    from { width: 200px; } // TO FIX: Make this value a percentage.
+    to   { width: 0px; }
 }
 
 .slideOutExt {
-  @include animation("slideOutExt .5s forwards");
+    @include animation("slideOutExt .5s forwards");
 }
 
 /**
