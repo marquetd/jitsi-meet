@@ -1,12 +1,12 @@
 /* jshint maxlen:false */
 
-var config = { // eslint-disable-line no-unused-vars
+var config = {// eslint-disable-line no-unused-vars
 //    configLocation: './config.json', // see ./modules/HttpConfigFetch.js
     hosts: {
-        domain: 'jitsi-meet.example.com',
+        domain: 'advid.ovh',
         //anonymousdomain: 'guest.example.com',
         //authdomain: 'jitsi-meet.example.com',  // defaults to <domain>
-        muc: 'conference.jitsi-meet.example.com', // FIXME: use XEP-0030
+        muc: 'conference.advid.ovh', // FIXME: use XEP-0030
         //jirecon: 'jirecon.jitsi-meet.example.com',
         //call_control: 'callcontrol.jitsi-meet.example.com',
         //focus: 'focus.jitsi-meet.example.com', // defaults to 'focus.jitsi-meet.example.com'
@@ -15,13 +15,13 @@ var config = { // eslint-disable-line no-unused-vars
 //  useStunTurn: true, // use XEP-0215 to fetch STUN and TURN server
 //  useIPv6: true, // ipv6 support. use at your own risk
     useNicks: false,
-    bosh: '//jitsi-meet.example.com/http-bind', // FIXME: use xep-0156 for that
+    bosh: '//advid.ovh/http-bind', // FIXME: use xep-0156 for that
     clientNode: 'http://jitsi.org/jitsimeet', // The name of client node advertised in XEP-0115 'c' stanza
     //focusUserJid: 'focus@auth.jitsi-meet.example.com', // The real JID of focus participant - can be overridden here
     //defaultSipNumber: '', // Default SIP number
 
     // Desktop sharing method. Can be set to 'ext', 'webrtc' or false to disable.
-    desktopSharingChromeMethod: 'ext',
+    desktopSharingChromeMethod: false,
     // The ID of the jidesha extension for Chrome.
     desktopSharingChromeExtId: 'diibjkoicjeejcmhdnailmkgecihlobk',
     // The media sources to use when using screen sharing with the Chrome
@@ -58,7 +58,7 @@ var config = { // eslint-disable-line no-unused-vars
     enableRecording: false,
     enableWelcomePage: true,
     //enableClosePage: false, // enabling the close page will ignore the welcome
-                              // page redirection when call is hangup
+    // page redirection when call is hangup
     disableSimulcast: false,
     logStats: false, // Enable logging of PeerConnection stats via the focus
 //    requireDisplayName: true, // Forces the participants that doesn't have display name to enter it when they enter the room.
@@ -69,8 +69,8 @@ var config = { // eslint-disable-line no-unused-vars
 //    callStatsID: "", // Application ID for callstats.io API
 //    callStatsSecret: "", // Secret for callstats.io API
     /*noticeMessage: 'Service update is scheduled for 16th March 2015. ' +
-    'During that time service will not be available. ' +
-    'Apologise for inconvenience.',*/
+     'During that time service will not be available. ' +
+     'Apologise for inconvenience.',*/
     disableThirdPartyRequests: false,
     minHDHeight: 540,
     // If true - all users without token will be considered guests and all users
