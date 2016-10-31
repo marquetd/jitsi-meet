@@ -1,6 +1,5 @@
 *.swp
 .*.tmp
-deploy-local.sh
 libs/
 all.css
 *css.map
@@ -54,3 +53,4 @@ buck-out/
 \.buckd/
 android/app/libs
 android/keystores/debug.keystore
+/nbproject/private/
