@@ -7,16 +7,16 @@ var interfaceConfig = {// eslint-disable-line no-unused-vars
     DEFAULT_BACKGROUND: '#474747',
     INITIAL_TOOLBAR_TIMEOUT: 20000,
     TOOLBAR_TIMEOUT: 4000,
-    DEFAULT_REMOTE_DISPLAY_NAME: "Fellow Jitster",
-    DEFAULT_LOCAL_DISPLAY_NAME: "me",
+    DEFAULT_REMOTE_DISPLAY_NAME: "Autre participant",
+    DEFAULT_LOCAL_DISPLAY_NAME: "moi",
     SHOW_JITSI_WATERMARK: true,
     JITSI_WATERMARK_LINK: "http://www.cgtr.fr/",
     SHOW_BRAND_WATERMARK: false,
     BRAND_WATERMARK_LINK: "",
     SHOW_POWERED_BY: false,
     GENERATE_ROOMNAMES_ON_WELCOME_PAGE: true,
-    APP_NAME: "SITM Visio",
-    LANG_DETECTION: false, // Allow i18n to detect the system language
+    APP_NAME: "SITM - Visio",
+    LANG_DETECTION: true, // Allow i18n to detect the system language
     INVITATION_POWERED_BY: true,
     /**
      * If we should show authentication block in profile
@@ -33,8 +33,8 @@ var interfaceConfig = {// eslint-disable-line no-unused-vars
      */
     //MAIN_TOOLBAR_SPLITTER_INDEX: -1,
     //TOOLBAR_BUTTONS: ['profile', 'authentication', 'microphone', 'camera', 'desktop', 'recording', 'security', 'raisehand', 'chat', 'etherpad', 'sharedvideo', 'sip', 'dialpad', 'settings', 'hangup', 'filmstrip', 'contacts'], // jshint ignore:line
-    TOOLBAR_BUTTONS: ['microphone', 'camera', 'security', 'chat', 'sip', 'dialpad', 'settings', 'hangup', 'filmstrip', 'contacts'], // jshint ignore:line
-    SETTINGS_SECTIONS: ['language', 'devices', 'moderator'],
+    TOOLBAR_BUTTONS: ['profile', 'microphone', 'camera', 'security', 'chat', 'sip', 'dialpad', 'settings', 'hangup', 'filmstrip'], // jshint ignore:line
+    SETTINGS_SECTIONS: ['language', 'devices'],
     // Determines how the video would fit the screen. 'both' would fit the whole
     // screen, 'height' would fit the original video height to the height of the
     // screen, 'width' would fit the original video width to the width of the

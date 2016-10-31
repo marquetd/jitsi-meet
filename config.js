@@ -64,7 +64,7 @@ var config = {// eslint-disable-line no-unused-vars
 //    requireDisplayName: true, // Forces the participants that doesn't have display name to enter it when they enter the room.
 //    startAudioMuted: 10, // every participant after the Nth will start audio muted
 //    startVideoMuted: 10, // every participant after the Nth will start video muted
-//    defaultLanguage: "en",
+    defaultLanguage: "fr",
 // To enable sending statistics to callstats.io you should provide Applicaiton ID and Secret.
 //    callStatsID: "", // Application ID for callstats.io API
 //    callStatsSecret: "", // Secret for callstats.io API
