@@ -21,9 +21,9 @@ var config = {// eslint-disable-line no-unused-vars
     //defaultSipNumber: '', // Default SIP number
 
     // Desktop sharing method. Can be set to 'ext', 'webrtc' or false to disable.
-    desktopSharingChromeMethod: false,
+    desktopSharingChromeMethod: 'ext',
     // The ID of the jidesha extension for Chrome.
-    desktopSharingChromeExtId: 'diibjkoicjeejcmhdnailmkgecihlobk',
+    desktopSharingChromeExtId: 'amgdofnnbnlhfgchnijldnbddndkikaf',
     // The media sources to use when using screen sharing with the Chrome
     // extension.
     desktopSharingChromeSources: ['screen', 'window'],
