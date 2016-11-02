@@ -14,6 +14,7 @@
 
 #disable_welcome + label
 {
+    display:none;
     background-image: url(../images/welcome_page/disable-welcome.png);
     cursor: pointer;
     -webkit-user-select: none;
@@ -114,6 +115,7 @@
 
 #welcome_page_main
 {
+    display:none;
     background-image:url(../images/welcome_page/pattern-body.png);
     width: 100%;
     position: absolute;
