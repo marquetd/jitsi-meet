@@ -32,10 +32,10 @@ deploy-init:
 
 deploy-appbundle:
 	cp \
-		$(BUILD_DIR)/app.bundle.js \
-		$(BUILD_DIR)/app.bundle.js.map \
-		$(BUILD_DIR)/external_api.js \
-		$(BUILD_DIR)/external_api.js.map \
+		$(BUILD_DIR)/app.bundle.min.js \
+		$(BUILD_DIR)/app.bundle.min.map \
+		$(BUILD_DIR)/external_api.min.js \
+		$(BUILD_DIR)/external_api.min.map \
 		$(OUTPUT_DIR)/analytics.js \
 		$(DEPLOY_DIR)
 
