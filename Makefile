@@ -20,7 +20,7 @@ update-deps:
 	$(NPM) update && $(NPM) install node-sass
 
 compile:
-	$(WEBPACK) -p
+	$(WEBPACK)
 
 clean:
 	rm -fr $(BUILD_DIR)
