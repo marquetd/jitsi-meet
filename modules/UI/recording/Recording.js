@@ -55,7 +55,8 @@ function _requestLiveStreamId() {
             state0: {
                 titleKey: "dialog.liveStreaming",
                 html:
-                    `<input name="streamId" type="text"
+                    `<input  class="input-control"
+                    name="streamId" type="text"
                     data-i18n="[placeholder]dialog.streamKey"
                     autofocus>`,
                 persistent: false,
@@ -123,6 +124,7 @@ function _requestRecordingToken () {
     let messageString = (
         `<input name="recordingToken" type="text"
                 data-i18n="[placeholder]dialog.token"
+                class="input-control"
                 autofocus>`
     );
     return new Promise(function (resolve, reject) {
@@ -387,10 +389,13 @@ var Recording = {
      * @param show {true} to show the recording button, {false} to hide it
      */
     showRecordingButton (show) {
-        if (_isRecordingButtonEnabled() && show) {
-            $('#toolbar_button_record').css({display: "inline-block"});
+        let shouldShow = show && _isRecordingButtonEnabled();
+        let id = 'toolbar_button_record';
+
+        if (shouldShow) {
+            UIUtil.showElement(id);
         } else {
-            $('#toolbar_button_record').css({display: "none"});
+            UIUtil.hideElement(id);
         }
     },
 
@@ -474,10 +479,12 @@ var Recording = {
             labelSelector.css({display: "inline-block"});
 
         // Recording spinner
-        if (recordingState === Status.RETRYING)
-            $("#recordingSpinner").show();
-        else
-            $("#recordingSpinner").hide();
+        let spinnerId = 'recordingSpinner';
+        if(recordingState === Status.RETRYING) {
+            UIUtil.showElement(spinnerId);
+        } else {
+            UIUtil.hideElement(spinnerId);
+        }
     },
     // checks whether recording is enabled and whether we have params
     // to start automatically recording

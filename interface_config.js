@@ -22,19 +22,26 @@ var interfaceConfig = {// eslint-disable-line no-unused-vars
      * If we should show authentication block in profile
      */
     AUTHENTICATION_ENABLE: true,
-    // the toolbar buttons line is intentionally left in one line, to be able
-    // to easily override values or remove them using regex
-    //MAIN_TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop', 'invite', 'fullscreen', 'hangup'], // jshint ignore:line
-    MAIN_TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop', 'invite', 'fullscreen', 'hangup'], // jshint ignore:line
     /**
      * The index of the splitter button in the main toolbar. The splitter
      * button is a button in the toolbar that will be applied a special styling
      * visually dividing the toolbar buttons.
      */
     //MAIN_TOOLBAR_SPLITTER_INDEX: -1,
-    //TOOLBAR_BUTTONS: ['profile', 'authentication', 'microphone', 'camera', 'desktop', 'recording', 'security', 'raisehand', 'chat', 'etherpad', 'sharedvideo', 'sip', 'dialpad', 'settings', 'hangup', 'filmstrip', 'contacts'], // jshint ignore:line
-    TOOLBAR_BUTTONS: ['authentication', 'microphone', 'camera', 'desktop', 'security', 'chat', 'sip', 'dialpad', 'settings', 'hangup', 'filmstrip'], // jshint ignore:line
-    //SETTINGS_SECTIONS: ['language', 'devices','moderator'],
+    /**
+     * the toolbar buttons line is intentionally left in one line, to be able
+     * to easily override values or remove them using regex
+     */
+    TOOLBAR_BUTTONS: [
+        //main toolbar
+        'microphone', 'camera', 'desktop', 'invite', 'fullscreen', 'hangup',
+        //extended toolbar
+        'contacts', 'chat', 'dialpad', 'settings', 'filmstrip'], // jshint ignore:line
+    /**
+     * Main Toolbar Buttons
+     * All of them should be in TOOLBAR_BUTTONS
+     */
+    MAIN_TOOLBAR_BUTTONS: ['microphone', 'camera', 'desktop', 'invite', 'fullscreen', 'hangup'], // jshint ignore:line
     SETTINGS_SECTIONS: ['language', 'devices'],
     // Determines how the video would fit the screen. 'both' would fit the whole
     // screen, 'height' would fit the original video height to the height of the
@@ -49,10 +56,6 @@ var interfaceConfig = {// eslint-disable-line no-unused-vars
     RANDOM_AVATAR_URL_PREFIX: false,
     RANDOM_AVATAR_URL_SUFFIX: false,
     FILM_STRIP_MAX_HEIGHT: 120,
-    LOCAL_THUMBNAIL_RATIO_WIDTH: 16,
-    LOCAL_THUMBNAIL_RATIO_HEIGHT: 9,
-    REMOTE_THUMBNAIL_RATIO_WIDTH: 1,
-    REMOTE_THUMBNAIL_RATIO_HEIGHT: 1,
     // Enables feedback star animation.
     ENABLE_FEEDBACK_ANIMATION: false,
     DISABLE_FOCUS_INDICATOR: false,
@@ -60,5 +63,8 @@ var interfaceConfig = {// eslint-disable-line no-unused-vars
     // disables the ringing sound when the RingOverlay is shown.
     DISABLE_RINGING: false,
     AUDIO_LEVEL_PRIMARY_COLOR: "rgba(255,255,255,0.4)",
-    AUDIO_LEVEL_SECONDARY_COLOR: "rgba(255,255,255,0.2)"
+    AUDIO_LEVEL_SECONDARY_COLOR: "rgba(255,255,255,0.2)",
+    POLICY_LOGO: null,
+    LOCAL_THUMBNAIL_RATIO: 16 / 9, //16:9
+    REMOTE_THUMBNAIL_RATIO: 1 //1:1
 };

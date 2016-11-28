@@ -303,7 +303,7 @@ if (!interfaceConfig.filmStripOnly) {
         this.container.appendChild(spanElement);
 
         var menuElement = document.createElement('i');
-        menuElement.className = 'icon-menu-up';
+        menuElement.className = 'icon-menu';
         menuElement.title = 'Remote user controls';
         spanElement.appendChild(menuElement);
 
@@ -441,11 +441,10 @@ RemoteVideo.prototype.waitForPlayback = function (streamElement, stream) {
 
     var self = this;
 
-    // Register 'onplaying' listener to trigger 'videoactive' on VideoLayout
-    // when video playback starts
+    // Triggers when video playback starts
     var onPlayingHandler = function () {
         self.wasVideoPlayed = true;
-        self.VideoLayout.videoactive(streamElement, self.id);
+        self.VideoLayout.remoteVideoActive(streamElement, self.id);
         streamElement.onplaying = null;
         // Refresh to show the video
         self.updateView();
@@ -517,33 +516,7 @@ RemoteVideo.prototype.addRemoteStreamElement = function (stream) {
     }
 
     $(streamElement).click(onClickHandler);
-},
-        /**
-         * Show/hide peer container for the given id.
-         */
-        RemoteVideo.prototype.showPeerContainer = function (state) {
-            if (!this.container)
-                return;
-
-            var isHide = state === 'hide';
-            var resizeThumbnails = false;
-
-            if (!isHide) {
-                if (!$(this.container).is(':visible')) {
-                    resizeThumbnails = true;
-                    $(this.container).show();
-                }
-                // Call updateView, so that we'll figure out if avatar
-                // should be displayed based on video muted status and whether or not
-                // it's in the lastN set
-                this.updateView();
-            } else if ($(this.container).is(':visible') && isHide)
-            {
-                resizeThumbnails = true;
-                $(this.container).hide();
-                if (this.connectionIndicator)
-                    this.connectionIndicator.hide();
-            }
+};
 
             if (resizeThumbnails) {
                 this.VideoLayout.resizeThumbnails();
@@ -627,7 +600,11 @@ RemoteVideo.prototype.removeRemoteVideoMenu = function () {
 RemoteVideo.createContainer = function (spanId) {
     let container = document.createElement('span');
     container.id = spanId;
-    container.className = 'videocontainer';
+    container.className = 'videocontainer videocontainer_remote';
+
+    let wrapper = document.createElement('div');
+    wrapper.className = 'videocontainer__background';
+    container.appendChild(wrapper);
 
     let indicatorBar = document.createElement('div');
     indicatorBar.className = "videocontainer__toptoolbar";
@@ -650,39 +627,18 @@ RemoteVideo.createContainer = function (spanId) {
  * participant.
  */
 RemoteVideo.showMuteParticipantDialog = function () {
-    //FIXME: don't show again checkbox is implemented very dirty. we should add
-    // this functionality to MessageHandler class.
-    if (window.localStorage
-            && window.localStorage.getItem(
-                    "dontShowMuteParticipantDialog") === "true") {
-        return Promise.resolve(MUTED_DIALOG_BUTTON_VALUES.muted);
-    }
-    let msgString =
-            `<div data-i18n="dialog.muteParticipantBody"></div>
-        <br />
-        <label>
-            <input type='checkbox' checked id='doNotShowMessageAgain' />
-            <span data-i18n='dialog.doNotShowMessageAgain'></span>
-        </label>`;
     return new Promise(resolve => {
         APP.UI.messageHandler.openTwoButtonDialog({
-            titleKey: "dialog.muteParticipantTitle",
-            msgString,
-            leftButtonKey: 'dialog.muteParticipantButton',
-            submitFunction: () => {
-                if (window.localStorage) {
-                    let form = $.prompt.getPrompt();
-                    if (form) {
-                        let input = form.find("#doNotShowMessageAgain");
-                        if (input.length) {
-                            window.localStorage.setItem(
-                                    "dontShowMuteParticipantDialog",
-                                    input.prop("checked"));
-                        }
-                    }
-                }
-                resolve(MUTED_DIALOG_BUTTON_VALUES.muted);
+            titleKey : "dialog.muteParticipantTitle",
+            msgString: "<div data-i18n='dialog.muteParticipantBody'></div>",
+            leftButtonKey: "dialog.muteParticipantButton",
+            dontShowAgain: {
+                id: "dontShowMuteParticipantDialog",
+                textKey: "dialog.doNotShowMessageAgain",
+                checked: true,
+                buttonValues: [true]
             },
+            submitFunction: () => resolve(MUTED_DIALOG_BUTTON_VALUES.muted),
             closeFunction: () => resolve(MUTED_DIALOG_BUTTON_VALUES.cancel)
         });
     });

@@ -29,15 +29,13 @@
 
 /* Fonts END */
 
-/* Theme  BEGIN */
-@import "themes/main";
-/* Theme END */
-
 /* Modules BEGIN */
 
 @import 'toastr';
 @import 'base';
+@import 'utils';
 @import 'overlay/overlay';
+@import 'inlay';
 @import 'reload_overlay/reload_overlay';
 @import 'modals/dialog';
 @import 'modals/feedback/feedback';
@@ -58,12 +56,16 @@
 @import 'jquery.contextMenu';
 @import 'keyboard-shortcuts';
 @import 'redirect_page';
-@import 'input-control/input-control';
+@import 'components/form-control';
+@import 'components/link';
 @import 'shortcuts/main';
-@import 'buttons/button-control';
+@import 'components/button-control';
+@import 'components/_input-control.scss';
 @import "modals/invite/invite";
 @import "connection-info";
 @import 'aui-components/dropdown';
 @import '404';
+@import 'policy';
+@import 'filmstrip';
 
 /* Modules END */

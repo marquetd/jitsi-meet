@@ -4,6 +4,18 @@
     z-index: $toolbarZ;
     height: 100%;
     pointer-events: auto;
+
+    /**
+     * Splitter button in the toolbar.
+     */
+    &__splitter {
+        display: inline-block;
+        vertical-align: middle;
+        width: 1px;
+        height: 50%;
+        margin: 0 $splitterToolbarButtonMargin;
+        background: $splitterColor;
+    }
 }
 
 #mainToolbarContainer{
@@ -42,28 +54,13 @@
     margin-right: auto;
     width: auto;
     border-radius: 3px;
-
-    /**
-     * First button in the toolbar.
-     */
-    .first {
+    .button:first-child {
         border-bottom-left-radius: 3px;
         border-top-left-radius: 3px;
     }
-
-    /**
-     * Last button in the toolbar.
-     */
-    .last {
+    .button:last-child {
         border-bottom-right-radius: 3px;
         border-top-right-radius: 3px;
-    }
-
-    /**
-     * Splitter button in the toolbar.
-     */
-    .splitter {
-        margin-left: $splitterToolbarButtonLeftMargin;
     }
 }
 
@@ -75,8 +72,8 @@
     display: flex;
     width: $defaultToolbarSize;
     height: 100%;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     padding-top: 10px;
     box-sizing: border-box;
     flex-direction: column;
@@ -256,7 +253,7 @@ a.button>#avatar {
  */
 @include keyframes(slideInExt) {
     from { width: 0px; }
-    to   { width: 200px; } // TO FIX: Make this value a percentage.
+    to   { width: $sidebarWidth; } // TO FIX: Make this value a percentage.
 }
 
 .slideInExt {
@@ -264,8 +261,8 @@ a.button>#avatar {
 }
 
 @include keyframes(slideOutExt) {
-    from { width: 200px; } // TO FIX: Make this value a percentage.
-    to   { width: 0px; }
+  from { width: $sidebarWidth; } // TO FIX: Make this value a percentage.
+  to   { width: 0px; }
 }
 
 .slideOutExt {

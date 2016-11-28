@@ -24,7 +24,7 @@ export default class LargeVideoManager {
             () => this.resizeContainer(VIDEO_CONTAINER_TYPE), emitter);
         this.addContainer(VIDEO_CONTAINER_TYPE, this.videoContainer);
 
-        // use the same video container to handle and desktop tracks
+        // use the same video container to handle desktop tracks
         this.addContainer("desktop", this.videoContainer);
 
         this.width = 0;
@@ -332,13 +332,14 @@ export default class LargeVideoManager {
             show = APP.conference.isConnectionInterrupted();
         }
 
+        let id = 'localConnectionMessage';
         if (show) {
-            $('#localConnectionMessage').css({display: "block"});
+            UIUtil.showElement(id);
             // Avatar message conflicts with 'videoConnectionMessage',
             // so it must be hidden
             this.showRemoteConnectionMessage(false);
         } else {
-            $('#localConnectionMessage').css({display: "none"});
+            UIUtil.hideElement(id);
         }
     }
 
@@ -382,7 +383,8 @@ export default class LargeVideoManager {
             $('#remoteConnectionMessage')
                 .attr("data-i18n", msgKey)
                 .attr("data-i18n-options", JSON.stringify(msgOptions));
-            APP.translation.translateElement($('#remoteConnectionMessage'));
+            APP.translation.translateElement(
+                $('#remoteConnectionMessage'), msgOptions);
         }
 
         this.videoContainer.positionRemoteConnectionMessage();
@@ -394,14 +396,12 @@ export default class LargeVideoManager {
      *
      * @param {string} msgKey the translation key which will be used to get
      * the message text to be displayed on the large video.
-     * @param {object} msgOptions translation options object
      *
      * @private
      */
-    _setLocalConnectionMessage (msgKey, msgOptions) {
+    _setLocalConnectionMessage (msgKey) {
         $('#localConnectionMessage')
-            .attr("data-i18n", msgKey)
-            .attr("data-i18n-options", JSON.stringify(msgOptions));
+            .attr("data-i18n", msgKey);
         APP.translation.translateElement($('#localConnectionMessage'));
     }
 

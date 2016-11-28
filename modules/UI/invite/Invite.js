@@ -32,7 +32,7 @@ class Invite {
                 error);
 
             if (!locked) {
-                this.roomLocker.resetPassword();
+                this.getRoomLocker().resetPassword();
             }
 
             this.setLockedFromElsewhere(locked);
@@ -40,10 +40,15 @@ class Invite {
 
         this.conference.on(ConferenceEvents.USER_ROLE_CHANGED, (id) => {
             if (APP.conference.isLocalId(id)
-                    && this.isModerator !== this.conference.isModerator) {
+                    && this.isModerator !== this.conference.isModerator()) {
 
-                this.setModerator(this.conference.isModerator);
+                this.setModerator(this.conference.isModerator());
             }
+        });
+
+        this.conference.on(ConferenceEvents.CONFERENCE_JOINED, () => {
+            let roomLocker = this.getRoomLocker();
+            roomLocker.hideRequirePasswordDialog();
         });
 
         APP.UI.addListener( UIEvents.INVITE_CLICKED,
@@ -51,9 +56,10 @@ class Invite {
 
         APP.UI.addListener( UIEvents.PASSWORD_REQUIRED,
             () => {
+                let roomLocker = this.getRoomLocker();
                 this.setLockedFromElsewhere(true);
-                this.roomLocker.requirePassword().then(() => {
-                    let pass = this.roomLocker.password;
+                roomLocker.requirePassword().then(() => {
+                    let pass = roomLocker.password;
                     // we received that password is required, but user is trying
                     // anyway to login without a password, mark room as not
                     // locked in case he succeeds (maybe someone removed the
@@ -62,7 +68,7 @@ class Invite {
                     // will be marked as locked.
                     if (!pass)
                         this.setLockedFromElsewhere(false);
-                    this.conference.join(this.roomLocker.password);
+                    this.conference.join(pass);
                 });
             });
     }
@@ -116,7 +122,6 @@ class Invite {
      * creating view object using as a model this module
      */
     initDialog() {
-        this.password = this.getPassword();
         this.view = new InviteDialogView(this);
     }
 
@@ -125,7 +130,7 @@ class Invite {
      * @returns {String} password
      */
     getPassword() {
-        return this.roomLocker.password;
+        return this.getRoomLocker().password;
     }
 
     /**
@@ -145,7 +150,7 @@ class Invite {
      */
     setRoomUnlocked() {
         if (this.isModerator) {
-            this.roomLocker.lock().then(() => {
+            this.getRoomLocker().lock().then(() => {
                 APP.UI.emitEvent(UIEvents.TOGGLE_ROOM_LOCK);
                 this.updateView();
             });
@@ -160,8 +165,8 @@ class Invite {
      */
     setRoomLocked(newPass) {
         let isModerator = this.isModerator;
-        if (isModerator && (newPass || !this.roomLocker.isLocked)) {
-            this.roomLocker.lock(newPass).then(() => {
+        if (isModerator && (newPass || !this.getRoomLocker().isLocked)) {
+            this.getRoomLocker().lock(newPass).then(() => {
                 APP.UI.emitEvent(UIEvents.TOGGLE_ROOM_LOCK);
                 this.updateView();
             });
@@ -183,7 +188,7 @@ class Invite {
      * @returns {Boolean} isLocked
      */
     isLocked() {
-        return this.roomLocker.isLocked;
+        return this.getRoomLocker().isLocked;
     }
 
     /**
@@ -191,11 +196,10 @@ class Invite {
      * @param isLocked
      */
     setLockedFromElsewhere(isLocked) {
-        // isLocked can be 1, true or false
-        let newLockState = (isLocked === 1) || isLocked;
-        let oldLockState = this.roomLocker.isLocked;
-        if (oldLockState !== newLockState) {
-            this.roomLocker.lockedElsewhere = isLocked;
+        let roomLocker = this.getRoomLocker();
+        let oldLockState = roomLocker.isLocked;
+        if (oldLockState !== isLocked) {
+            roomLocker.lockedElsewhere = isLocked;
             APP.UI.emitEvent(UIEvents.TOGGLE_ROOM_LOCK);
             this.updateView();
         }

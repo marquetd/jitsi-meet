@@ -2,6 +2,7 @@
 var UI = {};
 
 import Chat from "./side_pannels/chat/Chat";
+import SidePanels from "./side_pannels/SidePanels";
 import Toolbar from "./toolbars/Toolbar";
 import ToolbarToggler from "./toolbars/ToolbarToggler";
 import Avatar from "./avatar/Avatar";
@@ -15,6 +16,7 @@ import GumPermissionsOverlay
     from './gum_overlay/UserMediaPermissionsGuidanceOverlay';
 
 import PageReloadOverlay from './reload_overlay/PageReloadOverlay';
+import SuspendedOverlay from './suspended_overlay/SuspendedOverlay';
 import VideoLayout from "./videolayout/VideoLayout";
 import FilmStrip from "./videolayout/FilmStrip";
 import SettingsMenu from "./side_pannels/settings/SettingsMenu";
@@ -29,7 +31,7 @@ var EventEmitter = require("events");
 UI.messageHandler = require("./util/MessageHandler");
 var messageHandler = UI.messageHandler;
 var JitsiPopover = require("./util/JitsiPopover");
-var Feedback = require("./feedback/Feedback");
+import Feedback from "./feedback/Feedback";
 import FollowMe from "../FollowMe";
 
 var eventEmitter = new EventEmitter();
@@ -78,12 +80,11 @@ JITSI_TRACK_ERROR_TO_MESSAGE_KEY_MAP.microphone[TrackErrors.NO_DATA_FROM_SOURCE]
 function promptDisplayName() {
     let labelKey = 'dialog.enterDisplayName';
     let message = (
-        `<div class="input-control">
-            <label data-i18n="${labelKey}" class="input-control__label"></label>
+        `<div class="form-control">
+            <label data-i18n="${labelKey}" class="form-control__label"></label>
             <input name="displayName" type="text"
                data-i18n="[placeholder]defaultNickname"
-               class="input-control__input"
-               autofocus>
+               class="input-control" autofocus>
          </div>`
     );
 
@@ -125,20 +126,13 @@ function promptDisplayName() {
 }
 
 /**
- * Initialize chat.
- */
-function setupChat() {
-    Chat.init(eventEmitter);
-    $("#toggle_smileys").click(function() {
-        Chat.toggleSmileys();
-    });
-}
-
-/**
- * Initialize toolbars.
+ * Initialize toolbars with side panels.
  */
 function setupToolbars() {
+    // Initialize toolbar buttons
     Toolbar.init(eventEmitter);
+    // Initialize side panels
+    SidePanels.init(eventEmitter);
 }
 
 /**
@@ -209,7 +203,8 @@ UI.showChatError = function (err, msg) {
  * @param {string} displayName new nickname
  */
 UI.changeDisplayName = function (id, displayName) {
-    UI.ContactList.onDisplayNameChange(id, displayName);
+    if (UI.ContactList)
+        UI.ContactList.onDisplayNameChange(id, displayName);
     VideoLayout.onDisplayNameChanged(id, displayName);
 
     if (APP.conference.isLocalId(id) || id === 'localVideoContainer') {
@@ -255,7 +250,8 @@ UI.setLocalRaisedHandStatus = (raisedHandStatus) => {
 UI.initConference = function () {
     let id = APP.conference.getMyUserId();
     // Add myself to the contact list.
-    UI.ContactList.addContact(id, true);
+    if (UI.ContactList)
+        UI.ContactList.addContact(id, true);
 
     // Update default button states before showing the toolbar
     // if local role changes buttons state will be again updated.
@@ -439,7 +435,6 @@ UI.start = function () {
         }, 100, { leading: true, trailing: false });
         $("#videoconference_page").mousemove(debouncedShowToolbar);
         setupToolbars();
-        setupChat();
 
         // Initialise the recording module.
         if (config.enableRecording)
@@ -448,10 +443,10 @@ UI.start = function () {
         // Display notice message at the top of the toolbar
         if (config.noticeMessage) {
             $('#noticeText').text(config.noticeMessage);
-            $('#notice').css({display: 'block'});
+            UIUtil.showElement('notice');
         }
     } else {
-        $("#mainToolbarContainer").css("display", "none");
+        UIUtil.hideElement('mainToolbarContainer');
         FilmStrip.setupFilmStripOnly();
         messageHandler.enableNotifications(false);
         JitsiPopover.enabled = false;
@@ -482,8 +477,6 @@ UI.start = function () {
             "newestOnTop": false
         };
 
-        SettingsMenu.init(eventEmitter);
-        Profile.init(eventEmitter);
     }
 
     if(APP.tokenData.callee) {
@@ -568,7 +561,8 @@ UI.addUser = function (user) {
     var id = user.getId();
     var displayName = user.getDisplayName();
     UI.hideRingOverLay();
-    UI.ContactList.addContact(id);
+    if (UI.ContactList)
+        UI.ContactList.addContact(id);
 
     messageHandler.notify(
         displayName,'notify.somebody', 'connected', 'notify.connected'
@@ -595,7 +589,8 @@ UI.addUser = function (user) {
  * @param {string} displayName user nickname
  */
 UI.removeUser = function (id, displayName) {
-    UI.ContactList.removeContact(id);
+    if (UI.ContactList)
+        UI.ContactList.removeContact(id);
 
     messageHandler.notify(
         displayName,'notify.somebody', 'disconnected', 'notify.disconnected'
@@ -746,9 +741,11 @@ UI.showLoginPopup = function(callback) {
 
     let message = (
         `<input name="username" type="text"
-                placeholder="user@domain.net" autofocus>
+                placeholder="user@domain.net"
+                class="input-control" autofocus>
          <input name="password" type="password"
                 data-i18n="[placeholder]dialog.userPassword"
+                class="input-control"
                 placeholder="user password">`
     );
 
@@ -824,10 +821,14 @@ UI.emitEvent = function (type, options) {
 };
 
 UI.clickOnVideo = function (videoNumber) {
-    var remoteVideos = $(".videocontainer:not(#mixedstream)");
-    if (remoteVideos.length > videoNumber) {
-        remoteVideos[videoNumber].click();
+    let videos = $("#remoteVideos .videocontainer:not(#mixedstream)");
+    let videosLength = videos.length;
+
+    if(videosLength <= videoNumber) {
+        return;
     }
+    let videoIndex = videoNumber === 0 ? 0 : videosLength - videoNumber;
+    videos[videoIndex].click();
 };
 
 //Used by torture
@@ -847,7 +848,8 @@ UI.dockToolbar = function (isDock) {
  */
 function changeAvatar(id, avatarUrl) {
     VideoLayout.changeUserAvatar(id, avatarUrl);
-    UI.ContactList.changeUserAvatar(id, avatarUrl);
+    if (UI.ContactList)
+        UI.ContactList.changeUserAvatar(id, avatarUrl);
     if (APP.conference.isLocalId(id)) {
         Profile.changeAvatar(avatarUrl);
     }
@@ -1021,7 +1023,7 @@ UI.addMessage = function (from, displayName, message, stamp) {
 // eslint-disable-next-line no-unused-vars
 UI.updateDTMFSupport = function (isDTMFSupported) {
     //TODO: enable when the UI is ready
-    //Toolbar.showDialPadButton(dtmfSupport);
+    //Toolbar.showDialPadButton(isDTMFSupported);
 };
 
 /**
@@ -1037,25 +1039,26 @@ UI.requestFeedbackOnHangup = function () {
     if (Feedback.isVisible())
         return Promise.reject(UIErrors.FEEDBACK_REQUEST_IN_PROGRESS);
     // Feedback has been submitted already.
-    else if (Feedback.isEnabled() && Feedback.isSubmitted())
-        return Promise.resolve(true);
+    else if (Feedback.isEnabled() && Feedback.isSubmitted()) {
+        return Promise.resolve({
+            thankYouDialogVisible : true,
+            feedbackSubmitted: true
+        });
+    }
     else
         return new Promise(function (resolve) {
             if (Feedback.isEnabled()) {
-                // If the user has already entered feedback, we'll show the
-                // window and immidiately start the conference dispose timeout.
-                if (Feedback.getFeedbackScore() > 0) {
-                    Feedback.openFeedbackWindow();
-                    resolve(false);
-
-                } else { // Otherwise we'll wait for user's feedback.
-                    Feedback.openFeedbackWindow(() => resolve(false));
-                }
+                Feedback.openFeedbackWindow(
+                    (options) => {
+                        options.thankYouDialogVisible = false;
+                        resolve(options);
+                    });
             } else {
                 // If the feedback functionality isn't enabled we show a thank
                 // you dialog. Signaling it (true), so the caller
                 // of requestFeedback can act on it
-                resolve(true);
+                resolve(
+                    {thankYouDialogVisible : true, feedbackSubmitted: false});
             }
         });
 };
@@ -1176,7 +1179,7 @@ UI.getLargeVideo = function () {
 UI.showExtensionRequiredDialog = function (url) {
     messageHandler.openMessageDialog(
         "dialog.extensionRequired",
-        "dialog.firefoxExtensionPrompt",
+        "[html]dialog.firefoxExtensionPrompt",
         {url: url});
 };
 
@@ -1214,7 +1217,11 @@ UI.showExtensionExternalInstallationDialog = function (url) {
  * @param {JitsiTrackError} cameraError
  */
 UI.showDeviceErrorDialog = function (micError, cameraError) {
-    let localStoragePropName = "doNotShowErrorAgain";
+    let dontShowAgain = {
+        id: "doNotShowWarningAgain",
+        localStorageKey: "doNotShowErrorAgain",
+        textKey: "dialog.doNotShowWarningAgain"
+    };
     let isMicJitsiTrackErrorAndHasName = micError && micError.name &&
         micError instanceof JitsiMeetJS.errorTypes.JitsiTrackError;
     let isCameraJitsiTrackErrorAndHasName = cameraError && cameraError.name &&
@@ -1231,17 +1238,11 @@ UI.showDeviceErrorDialog = function (micError, cameraError) {
     }
 
     if (micError) {
-        localStoragePropName += "-mic-" + micError.name;
+        dontShowAgain.localStorageKey += "-mic-" + micError.name;
     }
 
     if (cameraError) {
-        localStoragePropName += "-camera-" + cameraError.name;
-    }
-
-    if (showDoNotShowWarning) {
-        if (window.localStorage[localStoragePropName] === "true") {
-            return;
-        }
+        dontShowAgain.localStorageKey += "-camera-" + cameraError.name;
     }
 
     let cameraJitsiTrackErrorMsg = cameraError
@@ -1266,12 +1267,6 @@ UI.showDeviceErrorDialog = function (micError, cameraError) {
         micError.message
             ? `<div>${micError.message}</div>`
             : ``;
-    let doNotShowWarningAgainSection = showDoNotShowWarning
-        ? `<label>
-            <input type='checkbox' id='doNotShowWarningAgain'>
-            <span data-i18n='dialog.doNotShowWarningAgain'></span>
-           </label>`
-        : ``;
     let message = '';
 
     if (micError) {
@@ -1290,8 +1285,6 @@ UI.showDeviceErrorDialog = function (micError, cameraError) {
             ${additionalCameraErrorMsg}`;
     }
 
-    message = `${message}${doNotShowWarningAgainSection}`;
-
     // To make sure we don't have multiple error dialogs open at the same time,
     // we will just close the previous one if we are going to show a new one.
     deviceErrorDialog && deviceErrorDialog.close();
@@ -1301,24 +1294,14 @@ UI.showDeviceErrorDialog = function (micError, cameraError) {
         message,
         false,
         {Ok: true},
-        function () {
-            let form  = $.prompt.getPrompt();
-
-            if (form) {
-                let input = form.find("#doNotShowWarningAgain");
-
-                if (input.length) {
-                    window.localStorage[localStoragePropName] =
-                        input.prop("checked");
-                }
-            }
-        },
+        function () {},
         null,
         function () {
             // Reset dialog reference to null to avoid memory leaks when
             // user closed the dialog manually.
             deviceErrorDialog = null;
-        }
+        },
+        showDoNotShowWarning ? dontShowAgain : undefined
     );
 
     function getTitleKey() {
@@ -1418,12 +1401,14 @@ UI.hideRingOverLay = function () {
 
 /**
  * Indicates if any the "top" overlays are currently visible. The check includes
- * the call overlay, GUM permissions overlay and a page reload overlay.
+ * the call overlay, suspended overlay, GUM permissions overlay
+ * and a page reload overlay.
  *
  * @returns {*|boolean} {true} if the overlay is visible, {false} otherwise
  */
 UI.isOverlayVisible = function () {
     return RingOverlay.isVisible()
+        || SuspendedOverlay.isVisible()
         || PageReloadOverlay.isVisible()
         || GumPermissionsOverlay.isVisible();
 };
@@ -1447,37 +1432,17 @@ UI.showUserMediaPermissionsGuidanceOverlay = function (browser) {
 };
 
 /**
+ * Shows suspended overlay with a button to rejoin conference.
+ */
+UI.showSuspendedOverlay = function () {
+    SuspendedOverlay.show();
+};
+
+/**
  * Hides browser-specific overlay with guidance how to proceed with gUM prompt.
  */
 UI.hideUserMediaPermissionsGuidanceOverlay = function () {
     GumPermissionsOverlay.hide();
-};
-
-/**
- * Shows or hides the keyboard shortcuts panel, depending on the current state.'
- */
-UI.toggleKeyboardShortcutsPanel = function() {
-    if (!messageHandler.isDialogOpened()) {
-        let msg = $('#keyboard-shortcuts').html();
-        let buttons = { Close: true };
-
-        messageHandler.openDialog(
-            'keyboardShortcuts.keyboardShortcuts', msg, true, buttons);
-    } else {
-        messageHandler.closeDialog();
-    }
-
-};
-
-/**
- * Shows or hides the keyboard shortcuts panel.'
- */
-UI.showKeyboardShortcutsPanel = function(show) {
-    if (show) {
-        $('#keyboard-shortcuts').show();
-    } else {
-        $('#keyboard-shortcuts').hide();
-    }
 };
 
 module.exports = UI;
