@@ -93,7 +93,8 @@
         "micMutedPopup": "Votre microphone a été désactivé afin que vous<br/>puissiez profiter pleinement de votre vidéo partagée.",
         "unableToUnmutePopup": "Vous ne pouvez pas réactiver votre microphone pendant que la vidéo partagée est activée.",
         "cameraDisabled": "La camera n'est pas disponible",
-        "micDisabled": "Le microphone n'est pas disponible"
+        "micDisabled": "Le microphone n'est pas disponible",
+	"remoteControl": "Contrôle à distance"
     },
     "bottomtoolbar": {
         "chat": "Ouvrir / fermer le chat",

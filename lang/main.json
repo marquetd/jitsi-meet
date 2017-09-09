@@ -100,7 +100,8 @@
         "micDisabled": "Microphone is not available",
         "filmstrip": "Show / hide videos",
         "profile": "Edit your profile",
-        "raiseHand": "Raise hand to speak"
+        "raiseHand": "Raise hand to speak",
+	"remotecontrol": "Remote control"
     },
     "bottomtoolbar": {
         "chat": "Open / close chat",

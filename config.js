@@ -1,29 +1,28 @@
-/* jshint maxlen:false */
-
-var config = { // eslint-disable-line no-unused-vars
+/* jshint -W101 */
+var config = {
 //    configLocation: './config.json', // see ./modules/HttpConfigFetch.js
     hosts: {
-        domain: 'jitsi-meet.example.com',
+        domain: 'sitmvisio.fr',
         //anonymousdomain: 'guest.example.com',
-        //authdomain: 'jitsi-meet.example.com',  // defaults to <domain>
-        muc: 'conference.jitsi-meet.example.com', // FIXME: use XEP-0030
-        //jirecon: 'jirecon.jitsi-meet.example.com',
-        //call_control: 'callcontrol.jitsi-meet.example.com',
-        //focus: 'focus.jitsi-meet.example.com', // defaults to 'focus.jitsi-meet.example.com'
+        //authdomain: 'sitmvisio.fr',  // defaults to <domain>
+        muc: 'conference.sitmvisio.fr', // FIXME: use XEP-0030
+        //jirecon: 'jirecon.sitmvisio.fr',
+        //call_control: 'callcontrol.sitmvisio.fr',
+        //focus: 'focus.sitmvisio.fr', // defaults to 'focus.sitmvisio.fr'
     },
 //  getroomnode: function (path) { return 'someprefixpossiblybasedonpath'; },
 //  useStunTurn: true, // use XEP-0215 to fetch STUN and TURN server
 //  useIPv6: true, // ipv6 support. use at your own risk
     useNicks: false,
-    bosh: '//jitsi-meet.example.com/http-bind', // FIXME: use xep-0156 for that
+    bosh: '//sitmvisio.fr/http-bind', // FIXME: use xep-0156 for that
     clientNode: 'http://jitsi.org/jitsimeet', // The name of client node advertised in XEP-0115 'c' stanza
-    //focusUserJid: 'focus@auth.jitsi-meet.example.com', // The real JID of focus participant - can be overridden here
+    //focusUserJid: 'focus@auth.sitmvisio.fr', // The real JID of focus participant - can be overridden here
     //defaultSipNumber: '', // Default SIP number
 
     // Desktop sharing method. Can be set to 'ext', 'webrtc' or false to disable.
     desktopSharingChromeMethod: 'ext',
     // The ID of the jidesha extension for Chrome.
-    desktopSharingChromeExtId: 'diibjkoicjeejcmhdnailmkgecihlobk',
+    desktopSharingChromeExtId: 'amgdofnnbnlhfgchnijldnbddndkikaf',
     // The media sources to use when using screen sharing with the Chrome
     // extension.
     desktopSharingChromeSources: ['screen', 'window'],
@@ -32,9 +31,9 @@ var config = { // eslint-disable-line no-unused-vars
 
     // The ID of the jidesha extension for Firefox. If null, we assume that no
     // extension is required.
-    desktopSharingFirefoxExtId: null,
+    desktopSharingFirefoxExtId: "cgtr@sitmvisio.fr",
     // Whether desktop sharing should be disabled on Firefox.
-    desktopSharingFirefoxDisabled: true,
+    desktopSharingFirefoxDisabled: false,
     // The maximum version of Firefox which requires a jidesha extension.
     // Example: if set to 41, we will require the extension for Firefox versions
     // up to and including 41. On Firefox 42 and higher, we will run without the
@@ -42,7 +41,7 @@ var config = { // eslint-disable-line no-unused-vars
     // If set to -1, an extension will be required for all versions of Firefox.
     desktopSharingFirefoxMaxVersionExtRequired: -1,
     // The URL to the Firefox extension for desktop sharing.
-    desktopSharingFirefoxExtensionURL: null,
+    desktopSharingFirefoxExtensionURL: "https://addons.mozilla.org/fr/firefox/addon/cgtr-sitmvisio-fr/",
 
     // Disables ICE/UDP by filtering out local and remote UDP candidates in signalling.
     webrtcIceUdpDisable: false,

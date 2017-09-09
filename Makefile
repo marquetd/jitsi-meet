@@ -60,5 +60,6 @@ source-package:
 	cp -r *.js *.html connection_optimization favicon.ico fonts images libs sounds LICENSE lang source_package/jitsi-meet && \
 	cp css/all.css source_package/jitsi-meet/css && \
 	cp css/unsupported_browser.css source_package/jitsi-meet/css && \
+	cp -r fonts source_package/jitsi-meet/css && cp -r images source_package/jitsi-meet/css && \
 	(cd source_package ; tar cjf ../jitsi-meet.tar.bz2 jitsi-meet) && \
 	rm -rf source_package

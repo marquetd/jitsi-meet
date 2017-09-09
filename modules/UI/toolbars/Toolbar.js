@@ -121,6 +121,10 @@ const buttonHandlers = {
         JitsiMeetJS.analytics.sendEvent(
             'toolbar.raiseHand.clicked');
         APP.conference.maybeToggleRaisedHand();
+    },
+    "toolbar_button_remotecontrol":function() {
+	event.preventDefault();
+	window.location.href = 'vnc:remote';
     }
 };
 
@@ -267,6 +271,16 @@ const defaultToolbarButtons = {
         shortcutDescription: "keyboardShortcuts.raiseHand",
         content: "Raise Hand",
         i18n: "[content]toolbar.raiseHand"
+    },
+    'remotecontrol': {
+        id: "toolbar_button_remotecontrol",
+        tooltipKey: 'toolbar.remotecontrol',
+        className: "button fa fa-plug",
+        shortcutFunc: function () {
+            console.log('remote !!');
+        },
+        content: "Remote control",
+        i18n: "[content]toolbar.remoteControl"
     }
 };
 

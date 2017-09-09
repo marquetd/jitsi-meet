@@ -19,7 +19,7 @@ var config = {
             // Transpile ES2015 (aka ES6) to ES5.
 
             exclude: __dirname + '/node_modules/',
-            loader: 'babel',
+            loader: 'babel-loader',
             query: {
                 presets: [
                     'es2015'
@@ -31,20 +31,20 @@ var config = {
             // to be available in such a form by multiple jitsi-meet
             // dependencies including AUI, lib-jitsi-meet.
 
-            loader: 'expose?$!expose?jQuery',
+            loader: 'expose-loader?$!expose-loader?jQuery',
             test: /\/node_modules\/jquery\/.*\.js$/
         },{
             // Disable AMD for the Strophe.js library or its imports will fail
             // at runtime.
 
-            loader: 'imports?define=>false&this=>window',
+            loader: 'imports-loader?define=>false&this=>window',
             test: strophe
         },{
             // Allow CSS to be imported into JavaScript.
 
             loaders: [
-                'style',
-                'css'
+                'style-loader',
+                'css-loader'
             ],
             test: /\.css$/
         },{
@@ -52,7 +52,7 @@ var config = {
             // by CSS into the output path.
 
             include: aui_css,
-            loader: 'file',
+            loader: 'file-loader',
             query: {
                 context: aui_css,
                 name: '[path][name].[ext]'
@@ -93,8 +93,7 @@ var config = {
                 'jQuery-Impromptu/dist/jquery-impromptu'
                     + (minimize ? '.min' : '')
                     + '.js',
-        },
-        packageAlias: 'browser'
+        }
     }
 };
 

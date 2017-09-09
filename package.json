@@ -49,6 +49,7 @@
     "babel-loader": "*",
     "babel-polyfill": "*",
     "babel-preset-es2015": "6.14.0",
+    "babel-preset-stage-1": "^6.24.1",
     "clean-css": "*",
     "css-loader": "*",
     "eslint": "*",
@@ -64,6 +65,9 @@
     "string-replace-loader": "*",
     "style-loader": "*",
     "webpack": "*"
+  },
+  "peerDependencies": {
+    "react-native": "0.36.0"
   },
   "license": "Apache-2.0",
   "scripts": {
